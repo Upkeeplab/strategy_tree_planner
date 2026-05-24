@@ -5,38 +5,59 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Strategy Tree Planner</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
   <link rel="stylesheet" href="static/style.css">
 </head>
 
 <body>
   <header>
-    <h1>Strategy Tree Planner v0.0.1</h1>
-
-    <div class="key-info">
-    Key words:  
-    <span class = "highlight">key</span>
-    <span class = "highlight">status</span>
-    <span class = "highlight">symbol</span>
-    <span class = "highlight">time</span>
-    </div>
-
+    <h1 style="font-size: 30px; font-family:Arial, Helvetica, sans-serif; letter-spacing: 5px;">
+      Strategy Planner v0.0.1
+    </h1>
+    
     <div class="toolbar">
-      <a href="pages/guide.html" style="color: white;">How to</a>
-      <button id="saveBtn">Save</button>
-      <button id="loadBtn">Load</button>
-      <button id="exportBtn">Export PDF</button>
-      <button id="sampleBtn">Load Example</button>
+      <a href="pages/guide.html">
+        Docs
+      </a>
+      <a href="pages/settings.html">
+        Settings
+      </a>
     </div>
 
   </header>
  
   <main>
     <section class="editor-panel">
+      <div class="key-info">
+
+        <b>Write Here</b>
+
+        <div class="right">
+          Key words:  
+          <span class = "highlight">key</span>
+          <span class = "highlight">status</span>
+          <span class = "highlight">sym</span>
+          <span class = "highlight">time</span>
+        </div>
+
+      </div>
+
       <textarea id="editor" spellcheck="false"></textarea>
       <div id="suggestions"></div>
     </section>
 
     <section class="preview-panel">
+
+      <div class="key-info">
+        <b>Output</b>
+        <div calss = "right">
+          <button id="saveBtn"><i class="fa fa-upload" aria-hidden="true"></i></button>
+          <button id="loadBtn"><i class="fa fa-upload" aria-hidden="true"></i></button>
+          <button id="exportBtn"><i class="fa fa-download" aria-hidden="true"></i></button>
+          <button id="sampleBtn"><i class="fa fa-upload" aria-hidden="true"></i></button>
+        </div>
+      </div>
+
       <div id="preview"></div>
     </section>
   </main>
@@ -44,6 +65,18 @@
   <script src="https://unpkg.com/textarea-caret@3.0.0/index.js"></script>
   <script src="scripts/script.js"></script>
   <script src="scripts/script_dropdown.js"></script>
+  <script src="scripts/theme.js"></script>
+
+  <footer class="footer">
+    <p>2026</p>
+
+    <div class="icons">
+      <a href="#"><i class="fa-brands fa-facebook"></i></a>
+      <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#"><i class="fa-brands fa-github"></i></a>
+    </div>
+
+  </footer>
 
 </body>
 </html>

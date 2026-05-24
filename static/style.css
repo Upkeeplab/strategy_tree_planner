@@ -1,27 +1,123 @@
+:root {
+  --bg: #111;
+  --text: white;
+  --primary: #3498db;
+  --page-out: white;
+}
+
+/* Green Theme */
+.dark-theme {
+  --bg: linear-gradient(135deg, #0b0f1a, #111827, #0a0a0a);
+  --text: #e5e7eb;
+  --primary: #60a5fa;
+  --accent: #f97316;
+  --card: rgba(255, 255, 255, 0.05);
+  --border: #374151;
+}
+
+/* Light Theme */
+.light-theme {
+  --bg: white;
+  --text: black;
+  --primary: black;
+  --accent: #9a9a9a;
+  --card: rgba(255, 255, 255, 0.7);
+  --border: #020202;
+}
+
+/* Halloween Theme */
+.halloween-theme {
+  --bg: linear-gradient(135deg, #0b0b0f, #1a0f1a, #2b0a2b);
+  --text: #ffe9c7;
+  --primary: #ff6b00;
+  --accent: #ff9e00;
+  --card: rgba(0, 0, 0, 0.6);
+  --border: #ff6b00;
+}
+
+/* summer Theme */
+.summer-theme {
+  --bg: linear-gradient(135deg, #87cefa, #00c9ff, #f9f871);
+  --text: #0b1b2b;
+  --primary: #ffcc00;
+  --accent: #ff6f61;
+  --card: rgba(255, 255, 255, 0.35);
+  --border: #00c9ff;
+}
+
+/* autumn Theme */
+.autumn-theme {
+  --bg: linear-gradient(135deg, #0b0b0f, #1a0f1a, #2b0a2b);
+  --text: #ffe9c7;
+  --primary: #ff6b00;
+  --accent: #ff9e00;
+  --card: rgba(0, 0, 0, 0.6);
+  --border: #ff6b00;
+}
+
+/* winter Theme */
+.winter-theme {
+  --bg: linear-gradient(135deg, #0a1a2f, #123456, #1e3c72);
+  --text: #e6f7ff;
+  --primary: #7fd1ff;
+  --accent: #b3e5ff;
+  --card: rgba(255, 255, 255, 0.08);
+  --border: #7fd1ff;
+}
+
+/* spring Theme */
+.spring-theme {
+  --bg: linear-gradient(135deg, #e8fdf5, #c8f7dc, #fff5ba);
+  --text: #1f3b2c;
+  --primary: #4caf50;
+  --accent: #ff7eb3;
+  --card: rgba(255, 255, 255, 0.5);
+  --border: #4caf50;
+}
+
+
 
 body {
-  margin: 0;
+  margin: 0px;
   font-family: 'Courier New', Courier, monospace;
-  background: #111;
-  color: #eee;
+  background: var(--bg);
+  color: var(--text);
 }
+
 
 header {
   padding: 12px 18px;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid var(--accent);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.toolbar button {
-  margin-left: 8px;
+a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.toolbar {
+  margin-left: 10px;
   padding: 8px 12px;
   border: none;
   cursor: pointer;
-  background: #2b2b2b;
-  color: white;
-  border-radius: 4px;
+  background: none;
+  color: var(--text);
+}
+button{
+  color: var(--text);
+  font-size: 15;
+  background-color: var(--card);
+  border: 1px solid var(--accent);
+  border-radius: 20px;
+  padding: 5px;
+}
+button:hover {
+  background: var(--accent);
+  transform: scale(1.05);
 }
 
 main {
@@ -38,14 +134,14 @@ main {
 }
 
 .editor-panel {
-  border-right: 1px solid #333;
+  border-right: 1px solid var(--accent);
 }
 
 textarea {
   width: 100%;
   height: 100%;
-  background: #0d0d0d;
-  color: #ddd;
+  background: var(--card);
+  color: var(--text);
   border: none;
   resize: none;
   font-family: monospace;
@@ -65,17 +161,28 @@ textarea {
 .special { color: #ff8888; }
 
 .key-info {
-  border: 1px solid rgb(167, 162, 162);
-  border-radius: 5px;
-  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--accent);
+  padding: 10px;
+  padding-bottom: 22px;
+  font-size: 15px;
+}
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .highlight {
-  background-color: rgb(177, 172, 7);
-  border: 1px solid rgb(99, 94, 94);
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--card);
+  border: 1px solid var(--accent);
   border-radius: 20px;
-  color: rgb(0, 0, 0);
-  padding: 10px;
+  color: var(--text);
+  padding: 5px;
 }
 
 #suggestions {
@@ -124,4 +231,29 @@ textarea {
     top: 0;
     width: 100%;
   }
+}
+
+
+.footer {
+  background: var(--bg);
+  border-top: 1px solid var(--accent);
+  color: var(--text);
+  padding: 15px;
+  text-align: center;
+}
+
+.icons a {
+  color: var(--text);
+  margin: 0 10px;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+.right-column {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* align to right */
+  margin-left: 20px;   /* space from right edge */
+  gap: 10px;            /* spacing between items */
 }
