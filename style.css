@@ -63,3 +63,25 @@ textarea {
 .goal { color: #7cc7ff; }
 .logic { color: #ffcc66; font-weight: bold; }
 .special { color: #ff8888; }
+
+
+#suggestions {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      max-width: 200px;
+      display: none;
+      position: absolute;
+      background: rgb(43, 42, 42);
+      font-family: monospace;
+      font-size: 15px;
+    }
+
+    .item {
+      padding: 5px;
+      cursor: pointer;
+    }
+
+    .item.active {
+      background: #8f9092;
+      color: white;
+    }
