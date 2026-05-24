@@ -1,13 +1,18 @@
 const input = document.getElementById("editor");
 const box = document.getElementById("suggestions");
-const TAB = "  "; // 2 spaces (or 4)
+const TAB = "  "; 
 
 // define triggers + options here
 const triggers = {
-  logic: ["[AND]", "[OR]", "[XOR]"],
+  logic: ["[AND]", "[OR]", "[XOR]","[SEQ]"],
   basic: ["[ASSUMPTION]", "[RISK]", "[CONSTRAINTS]"],
-  echo: ["[SEQ]", "[BRANCH]"],
-  decision: ["DP"]
+  if: ["DP","[BRANCH]"],
+  time: ["[NOW]", "[NEXT]", "[LATER]"],
+  priority: ["[Primary]", "[Secondary]"],
+  status: ["[DRAFT]","[ACTIVE]","[BLOCKED]","[COMPLETE]","[ABANDONED]"],
+  future:["[FUTURE A]","[FUTURE B]","[FUTURE C]"],
+  arrow: ["→"],
+  pref: ["★"]
 };
 
 let activeIndex = -1;

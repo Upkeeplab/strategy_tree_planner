@@ -85,3 +85,30 @@ textarea {
       background: #8f9092;
       color: white;
     }
+
+
+@page {
+  size: A4;
+  margin: 20mm;
+}
+  @media print {
+  /* hide everything */
+  body * {
+    visibility: hidden;
+  }
+
+  /* show only preview section */
+  .preview-panel,
+  .preview-panel * {
+    visibility: visible;
+  }
+
+  /* position it at top-left for clean PDF */
+  .preview-panel {
+    position: absolute;
+    font-size: 9pt;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
