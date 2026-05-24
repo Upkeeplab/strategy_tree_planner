@@ -1,7 +1,7 @@
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Courier New', Courier, monospace;
   background: #111;
   color: #eee;
 }
@@ -64,6 +64,19 @@ textarea {
 .logic { color: #ffcc66; font-weight: bold; }
 .special { color: #ff8888; }
 
+.key-info {
+  border: 1px solid rgb(167, 162, 162);
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.highlight {
+  background-color: rgb(177, 172, 7);
+  border: 1px solid rgb(99, 94, 94);
+  border-radius: 20px;
+  color: rgb(0, 0, 0);
+  padding: 10px;
+}
 
 #suggestions {
       border: 1px solid #ccc;

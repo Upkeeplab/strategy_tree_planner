@@ -4,15 +4,14 @@ const TAB = "  ";
 
 // define triggers + options here
 const triggers = {
-  logic: ["[AND]", "[OR]", "[XOR]","[SEQ]"],
-  basic: ["[ASSUMPTION]", "[RISK]", "[CONSTRAINTS]"],
-  if: ["DP","[BRANCH]"],
-  time: ["[NOW]", "[NEXT]", "[LATER]"],
-  priority: ["[Primary]", "[Secondary]"],
+  time: ["[NOW]", "[NEXT]", "[LATER]", "[FUTURE A]","[FUTURE B]","[FUTURE C]"],
   status: ["[DRAFT]","[ACTIVE]","[BLOCKED]","[COMPLETE]","[ABANDONED]"],
-  future:["[FUTURE A]","[FUTURE B]","[FUTURE C]"],
-  arrow: ["→"],
-  pref: ["★"]
+  sym: ["→","★"],
+  key: ["[AND]", "[OR]", "[XOR]","[SEQ]",
+        "[ASSUMPTION]", "[RISK]", "[CONSTRAINTS]",
+        "DP","[BRANCH]",
+        "[Primary]", "[Secondary]"
+  ]
 };
 
 let activeIndex = -1;
