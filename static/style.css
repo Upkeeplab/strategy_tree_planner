@@ -82,6 +82,7 @@ body {
   font-family: 'Courier New', Courier, monospace;
   background: var(--bg);
   color: var(--text);
+  line-height: 1.7;
 }
 
 header {
@@ -264,3 +265,57 @@ textarea {
   margin-left: 20px;   /* space from right edge */
   gap: 10px;            /* spacing between items */
 }
+
+
+/* ======= Guide ========= */
+
+code, pre {
+      background: var(--accent);
+      color: var(--text);
+      padding: 4px 6px;
+      border-radius: 6px;
+      font-family: monospace;
+    }
+
+    pre {
+      padding: 18px;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+    }
+
+    .tag {
+      color: #ffcc66;
+      font-weight: bold;
+    }
+
+    .note {
+      background: var(--bg);
+      padding: 14px;
+      border-left: 4px solid var(--accent);
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: var(--accent);
+      color: var(--text);
+    }
+
+    ul li {
+      margin-bottom: 10px;
+    }
+
+     h1, h2, h3 {
+      color: var(--text);
+    }

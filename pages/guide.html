@@ -1,25 +1,293 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Strategy Tree Planner</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="../static/style.css">
+  <title>Strategy Planner Guide</title>
+  <style>
+    body {
+      padding: 40px;
+      max-width: 1000px;
+    }
+  </style>
 </head>
-
 <body>
   <header>
     <h1 style="font-size: 30px; font-family:Arial, Helvetica, sans-serif; letter-spacing: 5px;">
-      Strategy Tree Planner :: Guide </h1>
+      Strategy Planner :: Guide </h1>
     <div class="toolbar">
-      <a href="../index.html">Back
-      </a>
+      <a href="../index.html">Back</a>
     </div>
   </header>
 
+<div class="note">
+  <strong>Table of Contents</strong>
+  <ul>
+    <li><a href="#core-philosophy">Core Philosophy</a></li>
+    <li><a href="#basic-structure">Basic Structure</a></li>
+    <li><a href="#relationship-tags">Strategic Relationship Tags</a></li>
+    <li><a href="#workflow">Recommended Workflow</a></li>
+    <li><a href="#design-principles">Design Principles</a></li>
+    <li><a href="#keyboard-shortcuts">Keyboard shortcuts ★</a></li>
+    <li><a href="#exporting">Exporting</a></li>
+    <li><a href="#privacy">Privacy</a></li>
+  </ul>
+</div>
+
+
+
+<p>
+Strategy Tree Planner is a lightweight local-first planning tool for structured strategic thinking.
+It combines hierarchical planning, military-style operational logic, and decision-tree semantics
+inside a simple text-based system.
+</p>
+
+<div class="note">
+  The app is designed for fast thinking, not project management.
+  It focuses on goals, alternatives, dependencies, sequencing, and strategic reasoning.
+</div>
+
+<h2 id="core-philosophy">Core Philosophy</h2>
+
+<p>
+Most planning tools only support parent-child hierarchy.
+This app supports richer strategic relationships:
+</p>
+
+<ul>
+  <li>Hierarchy</li>
+  <li>Dependencies</li>
+  <li>Mutually exclusive alternatives</li>
+  <li>Parallel goals</li>
+  <li>Sequencing</li>
+  <li>Decision points</li>
+  <li>Contingencies</li>
+</ul>
+
+<h2 id = "basic-structure">Basic Structure</h2>
+
+<pre>
+1 Main Goal
+
+    1.1 Intermediate Goal
+        - Task
+        - Task
+
+    1.2 Intermediate Goal
+        - Task
+</pre>
+
+<h3>Meaning</h3>
+
+<table>
+  <tr>
+    <th>Element</th>
+    <th>Purpose</th>
+  </tr>
+  <tr>
+    <td>Goal</td>
+    <td>Main desired outcome</td>
+  </tr>
+  <tr>
+    <td>Intermediate Goal</td>
+    <td>Necessary milestone or capability</td>
+  </tr>
+  <tr>
+    <td>Task</td>
+    <td>Concrete action</td>
+  </tr>
+</table>
+
+<h2 id = "relationship-tags">Strategic Relationship Tags</h2>
+
+<h3><span class="tag">[AND]</span></h3>
+
+<p>All branches should be pursued simultaneously.</p>
+
+<pre>
+[AND]
+1.1 Build product
+1.2 Build audience
+1.3 Raise capital
+</pre>
+
+<h3><span class="tag">[XOR]</span></h3>
+
+<p>Only one option should ultimately be selected.</p>
+
+<pre>
+[XOR]
+1.1 Subscription model
+1.2 Enterprise licensing
+1.3 Advertising
+</pre>
+
+<h3><span class="tag">[OR]</span></h3>
+
+<p>One or more options may be combined.</p>
+
+<pre>
+[OR]
+1.1 SEO
+1.2 Paid ads
+1.3 Partnerships
+</pre>
+
+<h3><span class="tag">[SEQ]</span></h3>
+
+<p>Order matters.</p>
+
+<pre>
+[SEQ]
+1.1 Research
+1.2 Prototype
+1.3 Testing
+1.4 Launch
+</pre>
+
+<h2>Decision Points</h2>
+
+<p>
+Decision Points (DPs) define moments where strategy changes depending on conditions.
+</p>
+
+<pre>
+DP1:
+If user growth slows:
+    → reduce expansion spending
+</pre>
+
+<h2>Dependencies</h2>
+
+<p>
+Dependencies express prerequisites between goals.
+</p>
+
+<pre>
+1.3 depends on → 1.1
+
+1.4 requires → 1.2 and 1.3
+</pre>
+
+<h2>Risks and Assumptions</h2>
+
+<h3><span class="tag">[RISK]</span></h3>
+
+<pre>
+[RISK]
+Large competitor enters market
+</pre>
+
+<h3><span class="tag">[ASSUMPTION]</span></h3>
+
+<pre>
+[ASSUMPTION]
+AI demand continues increasing
+</pre>
+
+<h2>Branching Logic</h2>
+
+<p>
+Branches represent alternative strategic paths.
+</p>
+
+<pre>
+[BRANCH]
+If funding fails:
+    → prioritize profitability
+</pre>
+
+<h2>Priority Markers</h2>
+
+<pre>
+[Primary] 1.1 Main strategy
+[Secondary] 1.2 Backup strategy
+
+★ 1.3 Preferred option
+</pre>
+
+<h2>Time Horizons</h2>
+
+<pre>
+[NOW]
+1.1 Research market
+
+[NEXT]
+1.2 Build MVP
+
+[LATER]
+1.3 International expansion
+</pre>
+
+<h2 id="workflow">Recommended Workflow</h2>
+
+<ol>
+  <li>Start with one main goal.</li>
+  <li>Break it into intermediate goals.</li>
+  <li>Define relationships using tags.</li>
+  <li>Add dependencies and contingencies.</li>
+  <li>Refine and reorganize branches.</li>
+  <li>Export to PDF for printing or sharing.</li>
+</ol>
+
+<h2 id="design-principles">Design Principles</h2>
+
+<ul>
+  <li>Keep hierarchy shallow when possible.</li>
+  <li>Use tags to express logic explicitly.</li>
+  <li>Separate alternatives from tasks.</li>
+  <li>Use dependencies sparingly.</li>
+  <li>Prefer clarity over completeness.</li>
+</ul>
+
+<h2 id ="keyboard-shortcuts">Keyboard shortcuts</h2>
+
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <td><code>TAB</code></td>
+    <td>Indent / create child node</td>
+  </tr>
+  <tr>
+    <td><code>SHIFT + TAB</code></td>
+    <td>Outdent / move to parent level</td>
+  </tr>
+  <tr>
+    <td><code>ENTER</code></td>
+    <td>Create new node</td>
+  </tr>
+  <tr>
+    <td><code>/</code></td>
+    <td>Open strategic command menu</td>
+  </tr>
+  <tr>
+    <td><code>CTRL + ↑ / ↓</code></td>
+    <td>Move branch up or down</td>
+  </tr>
+</table>
+
+<h2 id = "exporting">Exporting</h2>
+
+<p>
+Use the Export PDF button or your browser print function.
+</p>
+
+<pre>
+File → Print → Save as PDF
+</pre>
+
+<h2 id = "privacy">Privacy</h2>
+
+<p>
+The app is local-first and designed for private strategic thinking.
+No account or cloud storage is required.
+</p>
+
+
 <script src="../scripts/theme.js"></script>
-
-
 </body>
 </html>
