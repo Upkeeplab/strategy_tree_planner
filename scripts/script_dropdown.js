@@ -2,11 +2,24 @@ const input = document.getElementById("editor");
 const box = document.getElementById("suggestions");
 const TAB = "  "; 
 
+const format = (date) => date.toLocaleDateString();
+const today = format(new Date());
+
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+
+const yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+
+
 // define triggers + options here
 const triggers = {
   time: ["[NOW]", "[NEXT]", "[LATER]", "[FUTURE A]","[FUTURE B]","[FUTURE C]"],
   status: ["[DRAFT]","[ACTIVE]","[BLOCKED]","[COMPLETE]","[ABANDONED]"],
   sym: ["→","★"],
+  today:[`: ${today}`],
+  tomorrow: [`: ${format(tomorrow)}`],
+  yesterday:[`: ${format(yesterday)}`],
   key: ["[AND]", "[OR]", "[XOR]","[SEQ]",
         "[ASSUMPTION]", "[RISK]", "[CONSTRAINTS]",
         "DP","[BRANCH]",

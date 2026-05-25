@@ -5,17 +5,17 @@
   --page-out: white;
 }
 
-/* Green Theme */
+/* Dark Theme OK*/
 .dark-theme {
-  --bg: linear-gradient(135deg, #0b0f1a, #111827, #0a0a0a);
+  --bg: black;
   --text: #e5e7eb;
   --primary: #60a5fa;
-  --accent: #f97316;
+  --accent: #5212a5;
   --card: rgba(255, 255, 255, 0.05);
   --border: #374151;
 }
 
-/* Light Theme */
+/* Light Theme OK*/
 .light-theme {
   --bg: white;
   --text: black;
@@ -25,7 +25,7 @@
   --border: #020202;
 }
 
-/* Halloween Theme */
+/* Halloween Theme OK*/
 .halloween-theme {
   --bg: linear-gradient(135deg, #0b0b0f, #1a0f1a, #2b0a2b);
   --text: #ffe9c7;
@@ -35,46 +35,15 @@
   --border: #ff6b00;
 }
 
-/* summer Theme */
-.summer-theme {
-  --bg: linear-gradient(135deg, #87cefa, #00c9ff, #f9f871);
-  --text: #0b1b2b;
-  --primary: #ffcc00;
-  --accent: #ff6f61;
-  --card: rgba(255, 255, 255, 0.35);
-  --border: #00c9ff;
-}
-
-/* autumn Theme */
-.autumn-theme {
-  --bg: linear-gradient(135deg, #0b0b0f, #1a0f1a, #2b0a2b);
-  --text: #ffe9c7;
-  --primary: #ff6b00;
-  --accent: #ff9e00;
-  --card: rgba(0, 0, 0, 0.6);
-  --border: #ff6b00;
-}
-
-/* winter Theme */
+/* winter Theme OK*/
 .winter-theme {
-  --bg: linear-gradient(135deg, #0a1a2f, #123456, #1e3c72);
+  --bg: #1e3c72;
   --text: #e6f7ff;
   --primary: #7fd1ff;
   --accent: #b3e5ff;
   --card: rgba(255, 255, 255, 0.08);
   --border: #7fd1ff;
 }
-
-/* spring Theme */
-.spring-theme {
-  --bg: linear-gradient(135deg, #e8fdf5, #c8f7dc, #fff5ba);
-  --text: #1f3b2c;
-  --primary: #4caf50;
-  --accent: #ff7eb3;
-  --card: rgba(255, 255, 255, 0.5);
-  --border: #4caf50;
-}
-
 
 
 body {
@@ -116,10 +85,9 @@ a {
 }
 button{
   color: var(--text);
-  font-size: 15;
-  background-color: var(--card);
-  border: 1px solid var(--accent);
-  border-radius: 20px;
+  font-size: 19px;
+  background:none;
+  border: none;
   padding: 5px;
 }
 button:hover {
@@ -166,6 +134,8 @@ textarea {
 .goal { color: #7cc7ff; }
 .logic { color: #ffcc66; font-weight: bold; }
 .special { color: #ff8888; }
+.completed{color:green;}
+.blocked{font-weight: bold; color: var(--text);}
 
 .key-info {
   display: flex;
@@ -202,6 +172,7 @@ textarea {
       background: rgb(43, 42, 42);
       font-family: monospace;
       font-size: 15px;
+      color:white;
     }
 
     .item {
@@ -219,7 +190,7 @@ textarea {
   size: A4;
   margin: 20mm;
 }
-  @media print {
+@media print {
   /* hide everything */
   body * {
     visibility: hidden;
@@ -270,7 +241,7 @@ textarea {
 /* ======= Guide ========= */
 
 code, pre {
-      background: var(--accent);
+      background: var(--bg);
       color: var(--text);
       padding: 4px 6px;
       border-radius: 6px;
@@ -308,7 +279,7 @@ code, pre {
     }
 
     th {
-      background: var(--accent);
+      background: var(--bg);
       color: var(--text);
     }
 

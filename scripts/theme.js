@@ -4,11 +4,7 @@ function clearThemes() {
     "dark-theme",
     "light-theme",
     "halloween-theme",
-    "summer-theme",
-    "autumn-theme",
     "winter-theme",
-    "spring-theme"
-
   );
 }
 

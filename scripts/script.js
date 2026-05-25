@@ -50,6 +50,13 @@ function render() {
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
 
+    if (escaped.match(/^\s*\[COMPLETE\]/)) {
+      escaped = `<span class="completed">${escaped}</span>`;
+    }
+    if (escaped.match(/^\s*\[BLOCKED\]/)) {
+      escaped = `<span class="blocked">${escaped}</span>`;
+    }
+
     if (escaped.match(/^\s*\[/)) {
       escaped = `<span class="logic">${escaped}</span>`;
     }
@@ -86,7 +93,7 @@ document.getElementById("loadBtn").addEventListener("click", () => {
 });
 
 document.getElementById("sampleBtn").addEventListener("click", () => {
-  editor.value = example;
+  editor.value = "";
   render();
 });
 

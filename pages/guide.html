@@ -38,7 +38,7 @@
 
 
 <p>
-Strategy Tree Planner is a lightweight local-first planning tool for structured strategic thinking.
+Strategy Planner is a lightweight local-first planning tool for structured strategic thinking.
 It combines hierarchical planning, military-style operational logic, and decision-tree semantics
 inside a simple text-based system.
 </p>
@@ -249,25 +249,30 @@ If funding fails:
     <th>Action</th>
   </tr>
   <tr>
-    <td><code>TAB</code></td>
-    <td>Indent / create child node</td>
+    <td><code>key</code></td>
+    <td>[AND], [OR], [XOR], [SEQ],
+        [ASSUMPTION], [RISK], [CONSTRAINTS],
+        DP, [BRANCH],
+        [Primary], [Secondary]</td>
   </tr>
   <tr>
-    <td><code>SHIFT + TAB</code></td>
-    <td>Outdent / move to parent level</td>
+    <td><code>status</code></td>
+    <td>[DRAFT], [ACTIVE], [BLOCKED], [COMPLETE], [ABANDONED]</td>
   </tr>
-  <tr>
-    <td><code>ENTER</code></td>
-    <td>Create new node</td>
+    <tr>
+    <td><code>time</code></td>
+    <td>[NOW], [NEXT], [LATER], [FUTURE A], [FUTURE B], [FUTURE C]</td>
   </tr>
-  <tr>
-    <td><code>/</code></td>
-    <td>Open strategic command menu</td>
+    <tr>
+    <td><code>sym</code></td>
+    <td>→, ★</td>
   </tr>
-  <tr>
-    <td><code>CTRL + ↑ / ↓</code></td>
-    <td>Move branch up or down</td>
   </tr>
+    <tr>
+    <td><code>today</code></td>
+    <td>prints current date</td>
+  </tr>
+
 </table>
 
 <h2 id = "exporting">Exporting</h2>
