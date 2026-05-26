@@ -101,5 +101,13 @@ document.getElementById("exportBtn").addEventListener("click", () => {
   window.print();
 });
 
+document.getElementById("renderBtn").addEventListener("click", () => {
+  // Save it to local storage
+  localStorage.setItem("strategyTreeData", editor.value);
+
+  // Open page.html
+  window.open("pages/graph.html", "_blank");
+});
+
 editor.value = example;
 render();

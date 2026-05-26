@@ -24,7 +24,8 @@ const triggers = {
         "[ASSUMPTION]", "[RISK]", "[CONSTRAINTS]",
         "DP","[BRANCH]",
         "[Primary]", "[Secondary]"
-  ]
+  ],
+  emoji: ["🔥","⚠️","✅","❌","📌","🚀","⏳","💡","🔒"],
 };
 
 let activeIndex = -1;

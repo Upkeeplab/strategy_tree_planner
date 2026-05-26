@@ -39,6 +39,10 @@
     <div class="key-info">
         <b>Output</b>
         <div calss = "right">
+            <button id = "renderBtn" class="tooltip-btn">
+              <i class="fa-solid fa-diagram-project"></i>
+              <span class="tooltip">Generate graph</span>
+            </button>
             <button id="saveBtn" class="tooltip-btn">
               <i class="fa-sharp fa-solid fa-floppy-disk"></i>
               <span class="tooltip">Save file</span>
@@ -61,8 +65,8 @@
 
   <main>
     <section class="editor-panel">
-        <textarea id="editor" spellcheck="false"></textarea>
-        <div id="suggestions"></div>
+      <textarea id="editor" spellcheck="false"></textarea>
+      <div id="suggestions"></div>
     </section>
 
     <section class="preview-panel">
@@ -70,18 +74,20 @@
     </section>
   </main>
 
+ <!-- Scripts -->
   <script src="https://unpkg.com/textarea-caret@3.0.0/index.js"></script>
   <script src="scripts/script.js"></script>
   <script src="scripts/script_dropdown.js"></script>
   <script src="scripts/theme.js"></script>
 
+  <!-- Footer -->
   <footer class="footer">
     <p>Strategy planner v0.0.1</p>
-
     <div class="icons">
-      <a href="#"><i class="fa-brands fa-github"></i></a>
+      <a href="https://discord.gg/aZRSXdEb">
+        <i class="fa-brands fa-discord"></i>
+      </a>
     </div>
-
   </footer>
 
 </body>

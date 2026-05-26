@@ -114,7 +114,7 @@ textarea {
   height: 100%;
   background: var(--card);
   color: var(--text);
-  border: none;
+  border: 0.6px solid black;
   resize: none;
   font-family: monospace;
   font-size: 15px;
@@ -385,3 +385,10 @@ code, pre {
       rgba(255,255,255,0.08) 4ch
     );
 }
+
+/*============= Graph ============*/
+#graph {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+    }
