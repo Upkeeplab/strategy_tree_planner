@@ -1,56 +1,159 @@
-function jsonToDot(tree) {
+function wrapText(text, maxLength = 10) {
+  const words = text.split(" ");
+  let lines = [];
+  let current = "";
+  for (const word of words) {
+    if (
+      (current + word).length > maxLength
+    ) {
+      lines.push(current.trim());
+      current = "";
+    }
+    current += word + " ";
+  }
+  if (current.trim()) {
+    lines.push(current.trim());
+  }
+  console.log(lines.join("<br/>"));
+  return lines.join("<br/>");
+}
 
+function renderNode(node, nodeId) {
+  switch (node.type) {
+
+    case "relation":
+      return renderRelationNode(node, nodeId);
+
+    case "status":
+      return renderStatusNode(node, nodeId);
+
+    case "item":
+      return renderItemNode(node, nodeId);
+
+    default:
+      return renderDefaultNode(node, nodeId);
+  }
+}
+function renderDefaultNode(node, nodeId) {
+  //const wrappedLabel = wrapText(node.title, 10);
+  return `${nodeId} [
+  shape=box,
+  style="filled",
+  fillcolor="#ffe082",
+  label="${node.title}"
+];`;
+}
+function renderRelationNode(node, nodeId) {
+  return `${nodeId} [
+  shape=diamond,
+  style="filled",
+  fillcolor="#ffe082",
+  label="${node.value}"
+];`;
+}
+function renderStatusNode(node, nodeId) {
+
+  let color = "#cccccc";
+  switch(node.value) {
+
+    case "ACTIVE":
+      color = "#81c784";
+      break;
+
+    case "BLOCKED":
+      color = "#ef5350";
+      break;
+
+    case "COMPLETE":
+      color = "#64b5f6";
+      break;
+  }
+  return `${nodeId} [
+  shape=plain,
+  label=<
+    <table border="0"
+           cellborder="1"
+           cellspacing="0"
+           cellpadding="6"
+           bgcolor="${color}">
+      <tr>
+        <td>
+          <b>${node.title || "Status"}</b>
+        </td>
+      </tr>
+      <tr>
+        <td align="left">
+          ${node.value}
+        </td>
+      </tr>
+    </table> >];`;
+}
+function renderItemNode(node, nodeId) {
+  const status = node.status || "NONE";
+  const wrappedLabel = wrapText(node.title, 10);
+  return `${nodeId} [
+  shape=plain,
+  label=<
+    <table border="0"
+           cellborder="1"
+           cellspacing="0"
+           cellpadding="4">
+      <tr>
+        <td bgcolor="#4a90e2">
+          <font color="white">
+            <b>${wrappedLabel}</b>
+          </font>
+        </td>
+      </tr>
+      <tr>
+        <td align="left">
+          Status: ${status}
+        </td>
+      </tr>
+    </table>>];`;
+}
+
+function jsonToDot(tree) {
   let dot = `
 digraph G {
-  rankdir=TB;
+  rankdir=LR;
   node [shape=box];
-`;
-
+`
   let counter = 0;
 
   function walk(node, parentId = null) {
-
     const nodeId = `n${counter++}`;
-
-    let label = "";
-
-    if (node.type === "relation") {
-      label = node.relation;
-    }
-    else if (node.title) {
-      label = node.title;
-    }
-    else {
-      label = node.type;
-    }
-
-    dot += `
-${nodeId} [label="${label}"];
-`;
-
+    dot += renderNode(node, nodeId);
     if (parentId) {
-      dot += `
-${parentId} -> ${nodeId};
-`;
+      dot += `${parentId} -> ${nodeId};`;
     }
-
     if (node.children) {
       for (const child of node.children) {
         walk(child, nodeId);
       }
     }
   }
-
   walk(tree);
-
-  dot += `
-}
-`;
-
+  dot += `}`;
   return dot;
 }
 
 // ----------- Parser -------------
+const tagTypes = {
+
+  AND: "relation",
+  OR: "relation",
+  XOR: "relation",
+  SEQ: "relation",
+
+  DRAFT: "status",
+  ACTIVE: "status",
+  BLOCKED: "status",
+  COMPLETE: "status",
+
+  RISK: "meta",
+  ASSUMPTION: "meta"
+};
 
 function parseStrategicText(text) {
 
@@ -73,52 +176,38 @@ function parseStrategicText(text) {
     }
   ];
 
-  // Walk all lines
+  // loop all lines
   for (const rawLine of lines) {
-
-    // ---------- SAFETY ----------
 
     if (typeof rawLine !== "string") {
       continue;
     }
 
-    // ---------- INDENT ----------
-
     const indentMatch = rawLine.match(/^\s*/);
-
     const indent = indentMatch
       ? indentMatch[0].length
       : 0;
 
-    // ---------- CLEAN LINE ----------
-
     const line = rawLine.trim();
 
     if (!line) continue;
-
     let node = null;
 
-    // ==================================================
-    // RELATION TAGS
-    // ==================================================
-
+    // Relation tags
     const relationMatch = line.match(/^\[(.*?)\]$/);
 
     if (relationMatch) {
-
+      const tag = relationMatch[1].toUpperCase();
+      const tagType = tagTypes[tag];
       node = {
-        type: "relation",
-        relation: relationMatch[1],
+        type: tagType || "tag",
+        value: tag,
         children: []
       };
     }
 
-    // ==================================================
-    // DECISION POINTS
-    // ==================================================
-
+    // Decision points
     else if (/^DP\d*/i.test(line)) {
-
       node = {
         type: "decision",
         title: line,
@@ -126,12 +215,8 @@ function parseStrategicText(text) {
       };
     }
 
-    // ==================================================
     // CONDITIONS
-    // ==================================================
-
     else if (/^if\s+/i.test(line)) {
-
       node = {
         type: "condition",
         title: line,
@@ -139,12 +224,8 @@ function parseStrategicText(text) {
       };
     }
 
-    // ==================================================
     // ARROWS / ACTION CONSEQUENCES
-    // ==================================================
-
     else if (/^→/.test(line)) {
-
       node = {
         type: "action",
         title: line.replace(/^→\s*/, ""),
@@ -152,12 +233,8 @@ function parseStrategicText(text) {
       };
     }
 
-    // ==================================================
     // BULLET TASKS
-    // ==================================================
-
     else if (/^- /.test(line)) {
-
       node = {
         type: "task",
         title: line.replace(/^- /, ""),
@@ -165,16 +242,10 @@ function parseStrategicText(text) {
       };
     }
 
-    // ==================================================
     // NUMBERED GOALS
-    // ==================================================
-
     else {
-
       const match = line.match(/^(\S+)\s+(.*)$/);
-
       if (match) {
-
         node = {
           type: "item",
           id: match[1],
@@ -182,23 +253,17 @@ function parseStrategicText(text) {
           children: []
         };
       }
-
       else {
-
-        // fallback free-text node
-
-        node = {
-          type: "text",
-          title: line,
-          children: []
-        };
-      }
+          // fallback free-text node
+          node = {
+            type: "text",
+            title: line,
+            children: []
+          };
+        }
     }
 
-    // ==================================================
     // FIND PARENT USING INDENTATION
-    // ==================================================
-
     while (
       stack.length > 0 &&
       indent <= stack[stack.length - 1].indent
@@ -222,16 +287,14 @@ function parseStrategicText(text) {
   return root;
 }
 
-//console.log(JSON.stringify(tree, null, 2));
-
 // ----------- Rendering ----------
-
 const viz = new Viz();
 const text = localStorage.getItem("strategyTreeData");
 
 function renderGraph() {
 
   const json_tree = parseStrategicText(text);
+  console.log(JSON.stringify(json_tree, null, 2));
   const dot = jsonToDot(json_tree);
 
   viz.renderSVGElement(dot)
@@ -246,7 +309,4 @@ function renderGraph() {
 }
 
 // General 
-
-//document.getElementById("renderBtn")
-//        .addEventListener("click", renderGraph);
 renderGraph();

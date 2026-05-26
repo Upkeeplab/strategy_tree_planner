@@ -97,7 +97,12 @@ main {
   height: calc(100vh - 70px);
 }
 
-.editor-panel,
+.editor-panel{
+  width: 50%;
+  padding: 16px;
+  box-sizing: border-box;
+  overflow: none;
+}
 .preview-panel {
   width: 50%;
   padding: 16px;
@@ -268,7 +273,6 @@ textarea {
 
 .icons a {
   color: var(--text);
-  margin: 0 10px;
   font-size: 20px;
   text-decoration: none;
 }
@@ -391,4 +395,7 @@ code, pre {
       background: white;
       padding: 20px;
       border-radius: 8px;
+      overflow: auto;
+      width: 100%;
+      height: 100%;
     }
