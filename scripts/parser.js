@@ -124,33 +124,86 @@ function renderItemNode(node, nodeId) {
 
 // ------------ JSON to DOT ------------------
 function jsonToDot(tree) {
+  let counter = 0;
   let dot = `
 digraph G {
-  rankdir=LR;
-  node [shape=box
-  width=2,
+  rankdir=TB;
+  graph [
+  compound=true,
+  newrank=true,
+  nodesep=0.4,
+  ranksep=0.8
 ];
-`
-  let counter = 0;
+  node [
+    shape=box,
+    width=2
+  ];`;
 
   function walk(node, parentId = null) {
     const nodeId = `n${counter++}`;
-    dot += renderNode(node, nodeId);
+    if (node.type === "relation") {
+      const clusterId = `cluster_${counter++}`;
+      const deferred = [];
+      dot += `subgraph ${clusterId} {
+                label="${node.value}";
+                style="filled";
+                color="#e9e2e2ba";`;
+
+      for (const child of node.children) {
+        const childId = `n${counter++}`;
+        dot += renderNode(
+            {
+              ...child,
+              children: []
+            },
+            childId
+          );
+        if (parentId) {
+          dot += `${parentId} -> ${childId};`;
+        }
+        deferred.push({
+          child,
+          childId
+        });
+      }
+      dot += `}`;
+
+      for (const entry of deferred) {
+        const {child,childId} = entry;
+
+        if (child.children) {
+          for (const grandChild of child.children) {
+            walk(grandChild,childId);
+          }
+        }
+      }
+      return;
+    }
+    dot += renderNode(
+      node,
+      nodeId
+    );
+
     if (parentId) {
       dot += `${parentId} -> ${nodeId};`;
     }
     if (node.children) {
       for (const child of node.children) {
-        walk(child, nodeId);
+        walk(
+          child,
+          nodeId
+        );
       }
     }
   }
-  walk(tree);
+
+  for (const child of tree.children) {
+  walk(child);
+}
   dot += `}`;
   return dot;
 }
 
-// ----------- From text to json -------------
 const tagTypes = {
 
   AND: "relation",
@@ -162,25 +215,21 @@ const tagTypes = {
   ACTIVE: "status",
   BLOCKED: "status",
   COMPLETE: "status",
+  ABANDONED: "status",
 
   RISK: "meta",
   ASSUMPTION: "meta"
 };
 
 function parseStrategicText(text) {
-
-  // Split lines and remove fully empty ones
   const lines = text
     .split("\n")
     .filter(line => line.trim().length > 0);
 
-  // Root node
   const root = {
     type: "root",
     children: []
   };
-
-  // Stack for hierarchy tracking
   const stack = [
     {
       indent: -1,
@@ -188,7 +237,8 @@ function parseStrategicText(text) {
     }
   ];
 
-  // loop all lines
+  const activeRelations = {};
+
   for (const rawLine of lines) {
 
     if (typeof rawLine !== "string") {
@@ -197,64 +247,82 @@ function parseStrategicText(text) {
 
     const indentMatch = rawLine.match(/^\s*/);
     const indent = indentMatch
-      ? indentMatch[0].length
-      : 0;
-
+        ? indentMatch[0].length
+        : 0;
     const line = rawLine.trim();
-
     if (!line) continue;
-    let node = null;
 
-    // Relation tags
-    const relationMatch = line.match(/^\[(.*?)\]$/);
-    // Detect status anywhere in line
-    const statusMatch = line.match(/\[(COMPLETE|BLOCKED|DRAFT|ABANDONED|ACTIVE)\]/);
+    // Clear deeper active relations
+    for (const key in activeRelations) {
+      if (Number(key) > indent) {
+        delete activeRelations[key];
+      }
+    }
+
+    // Detect status
+    const statusMatch =
+      line.match(
+        /\[(COMPLETE|BLOCKED|DRAFT|ABANDONED|ACTIVE)\]/i);
+
     const status = statusMatch
-          ? statusMatch[1]
-          : null;
-    // Remove status tags from displayed text
+        ? statusMatch[1].toUpperCase()
+        : null;
+
+    // Remove status tags from visible line
     const cleanLine = line
-      .replace(/\[(COMPLETE|BLOCKED|DRAFT|ABANDONED|ACTIVE)\]/g, "")
+      .replace(/\[(COMPLETE|BLOCKED|DRAFT|ABANDONED|ACTIVE)\]/gi,"")
       .trim();
 
+    // Create node
+    let node = null;
+
+    // RELATION TAGS
+    const relationMatch =cleanLine.match(/^\[(.*?)\]$/);
+
     if (relationMatch) {
-      const tag = relationMatch[1].toUpperCase();
-      const tagType = tagTypes[tag];
+      const tag =relationMatch[1].toUpperCase();
+      const tagType =
+        tagTypes[tag];
       node = {
         type: tagType || "tag",
         value: tag,
         children: []
       };
-    }
 
-    // Decision points
-    else if (/^DP\d*/i.test(line)) {
+      // Register active relation
+      if (tagType === "relation") {
+
+        activeRelations[indent] = node;
+      }
+    }
+    // DECISION POINT
+    else if (/^DP\d*/i.test(cleanLine)) {
       node = {
         type: "decision",
-        title: line,
+        title: cleanLine,
+        status,
         children: []
       };
     }
-
-    // CONDITIONS
-    else if (/^if\s+/i.test(line)) {
+    // CONDITION
+    else if (/^if\s+/i.test(cleanLine)) {
       node = {
         type: "condition",
-        title: line,
+        title: cleanLine,
+        status,
         children: []
       };
     }
-
-    // ARROWS / ACTION CONSEQUENCES
-    else if (/^→/.test(line)) {
+    // ACTION CONSEQUENCE
+    else if (/^→/.test(cleanLine)) {
       node = {
         type: "action",
-        title: line.replace(/^→\s*/, ""),
+        title: cleanLine.replace(/^→\s*/, ""),
+        status,
         children: []
       };
     }
-
-    // BULLET TASKS
+    // BULLET TASK
     else if (/^- /.test(cleanLine)) {
       node = {
         type: "task",
@@ -263,8 +331,7 @@ function parseStrategicText(text) {
         children: []
       };
     }
-
-    // NUMBERED GOALS
+    // NUMBERED ITEM
     else {
       const match = cleanLine.match(/^(\S+)\s+(.*)$/);
       if (match) {
@@ -276,18 +343,19 @@ function parseStrategicText(text) {
           children: []
         };
       }
+
+      // FALLBACK FREE TEXT
       else {
-          // fallback free-text node
-          node = {
-            type: "text",
-            title: typeof line === "string" ? line : "",
-            status,
-            children: []
-          };
-        }
+        node = {
+          type: "text",
+          title: cleanLine,
+          status,
+          children: []
+        };
+      }
     }
 
-    // FIND PARENT USING INDENTATION
+    // Resolve indentation stack
     while (
       stack.length > 0 &&
       indent <= stack[stack.length - 1].indent
@@ -295,19 +363,24 @@ function parseStrategicText(text) {
       stack.pop();
     }
 
-    // Parent node
-    const parent = stack[stack.length - 1].node;
+    // Default parent from indentation
+    let parent = stack[stack.length - 1].node;
 
-    // Attach child
+    // If active relation exists at this indent,
+    // attach to relation instead
+    if (activeRelations[indent] &&node.type !== "relation") {
+      parent =activeRelations[indent];
+    }
+
+    // Attach node
     parent.children.push(node);
 
-    // Push current node
+    // Push onto stack
     stack.push({
       indent,
       node
     });
   }
-
   return root;
 }
 
