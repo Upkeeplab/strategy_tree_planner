@@ -1,20 +1,16 @@
-function wrapText(text, maxLength = 10) {
-  const words = text.split(" ");
+function safeTitle(title) {
+  const t = (title ?? "").toString().trim();
+  return t.length ? t : "(empty)";
+}
+
+function wrapText(text, maxLength = 12) {
+  text = String(text ?? "").trim();
+  if (!text) return "";
+
   let lines = [];
-  let current = "";
-  for (const word of words) {
-    if (
-      (current + word).length > maxLength
-    ) {
-      lines.push(current.trim());
-      current = "";
-    }
-    current += word + " ";
+  for (let i = 0; i < text.length; i += maxLength) {
+    lines.push(text.slice(i, i + maxLength));
   }
-  if (current.trim()) {
-    lines.push(current.trim());
-  }
-  console.log(lines.join("<br/>"));
   return lines.join("<br/>");
 }
 
@@ -35,17 +31,44 @@ function renderNode(node, nodeId) {
   }
 }
 function renderDefaultNode(node, nodeId) {
-  //const wrappedLabel = wrapText(node.title, 10);
+  const status = node.status || "NONE";
+  let color = "#000000";
+  switch(status) {
+    case "ACTIVE":
+      color = "#81c784";
+      break;
+    case "BLOCKED":
+      color = "#ef5350";
+      break;
+    case "COMPLETE":
+      color = "#64b5f6";
+      break;
+  }
+  const wrappedLabel = wrapText(node.title, 10);
   return `${nodeId} [
-  shape=box,
-  style="filled",
-  fillcolor="#ffe082",
-  label="${node.title}"
-];`;
+  shape=plain,
+  label=<
+    <table border="0"
+           cellborder="1"
+           cellspacing="0"
+           cellpadding="4">
+      <tr>
+        <td bgcolor="#636356">
+          <font color="white">
+            <b>${safeTitle(node.title)}</b>
+          </font>
+        </td>
+      </tr>
+      <tr>
+        <td align="left">
+          Status: <font color="${color}">${status}</font>
+        </td>
+      </tr>
+    </table>>];`;
 }
 function renderRelationNode(node, nodeId) {
   return `${nodeId} [
-  shape=diamond,
+  shape=box,
   style="filled",
   fillcolor="#ffe082",
   label="${node.value}"
@@ -69,7 +92,7 @@ function renderStatusNode(node, nodeId) {
       break;
   }
   return `${nodeId} [
-  shape=plain,
+  shape=box,
   label=<
     <table border="0"
            cellborder="1"
@@ -101,7 +124,7 @@ function renderItemNode(node, nodeId) {
       <tr>
         <td bgcolor="#4a90e2">
           <font color="white">
-            <b>${wrappedLabel}</b>
+            <b>${safeTitle(wrappedLabel)}</b>
           </font>
         </td>
       </tr>
@@ -117,7 +140,9 @@ function jsonToDot(tree) {
   let dot = `
 digraph G {
   rankdir=LR;
-  node [shape=box];
+  node [shape=box
+  width=2,
+];
 `
   let counter = 0;
 
@@ -195,6 +220,15 @@ function parseStrategicText(text) {
 
     // Relation tags
     const relationMatch = line.match(/^\[(.*?)\]$/);
+    // Detect status anywhere in line
+    const statusMatch = line.match(/\[(COMPLETE|BLOCKED|DRAFT|ABANDONED|ACTIVE)\]/);
+    const status = statusMatch
+          ? statusMatch[1]
+          : null;
+    // Remove status tags from displayed text
+    const cleanLine = line
+      .replace(/\[(COMPLETE|BLOCKED|DRAFT|ABANDONED|ACTIVE)\]/g, "")
+      .trim();
 
     if (relationMatch) {
       const tag = relationMatch[1].toUpperCase();
@@ -234,22 +268,24 @@ function parseStrategicText(text) {
     }
 
     // BULLET TASKS
-    else if (/^- /.test(line)) {
+    else if (/^- /.test(cleanLine)) {
       node = {
         type: "task",
-        title: line.replace(/^- /, ""),
+        title: cleanLine.replace(/^- /, "").trim(),
+        status,
         children: []
       };
     }
 
     // NUMBERED GOALS
     else {
-      const match = line.match(/^(\S+)\s+(.*)$/);
+      const match = cleanLine.match(/^(\S+)\s+(.*)$/);
       if (match) {
         node = {
           type: "item",
           id: match[1],
           title: match[2],
+          status,
           children: []
         };
       }
@@ -257,7 +293,8 @@ function parseStrategicText(text) {
           // fallback free-text node
           node = {
             type: "text",
-            title: line,
+            title: typeof line === "string" ? line : "",
+            status,
             children: []
           };
         }
