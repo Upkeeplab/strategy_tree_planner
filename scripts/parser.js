@@ -2,7 +2,6 @@ function safeTitle(title) {
   const t = (title ?? "").toString().trim();
   return t.length ? t : "(empty)";
 }
-
 function wrapText(text, maxLength = 12) {
   text = String(text ?? "").trim();
   if (!text) return "";
@@ -13,7 +12,6 @@ function wrapText(text, maxLength = 12) {
   }
   return lines.join("<br/>");
 }
-
 function renderNode(node, nodeId) {
   switch (node.type) {
 
@@ -42,29 +40,17 @@ function renderDefaultNode(node, nodeId) {
       break;
     case "COMPLETE":
       color = "#64b5f6";
-      break;
+      break;  
   }
   const wrappedLabel = wrapText(node.title, 10);
   return `${nodeId} [
-  shape=plain,
-  label=<
-    <table border="0"
-           cellborder="1"
-           cellspacing="0"
-           cellpadding="4">
-      <tr>
-        <td bgcolor="#636356">
-          <font color="white">
-            <b>${safeTitle(node.title)}</b>
-          </font>
-        </td>
-      </tr>
-      <tr>
-        <td align="left">
-          Status: <font color="${color}">${status}</font>
-        </td>
-      </tr>
-    </table>>];`;
+  shape=box,
+  style="filled",
+  width = 2,
+  fillcolor="#e3c2af",
+  label=<${safeTitle(node.title)}<BR/>
+  <font color="${color}">${status}</font>
+  >];`;
 }
 function renderRelationNode(node, nodeId) {
   return `${nodeId} [
@@ -112,30 +98,31 @@ function renderStatusNode(node, nodeId) {
     </table> >];`;
 }
 function renderItemNode(node, nodeId) {
-  const status = node.status || "NONE";
   const wrappedLabel = wrapText(node.title, 10);
+  const status = node.status || "STATUS: NONE";
+  let color = "#fffb00";
+  switch(status) {
+    case "ACTIVE":
+      color = "#81c784";
+      break;
+    case "BLOCKED":
+      color = "#ef5350";
+      break;
+    case "COMPLETE":
+      color = "#64b5f6";
+      break;
+  }
   return `${nodeId} [
-  shape=plain,
-  label=<
-    <table border="0"
-           cellborder="1"
-           cellspacing="0"
-           cellpadding="4">
-      <tr>
-        <td bgcolor="#4a90e2">
-          <font color="white">
-            <b>${safeTitle(wrappedLabel)}</b>
-          </font>
-        </td>
-      </tr>
-      <tr>
-        <td align="left">
-          Status: ${status}
-        </td>
-      </tr>
-    </table>>];`;
+  shape=box,
+  style="filled",
+  width = 2,
+  fillcolor="#afc7e3",
+  label=<${safeTitle(node.title)}<BR/>
+  <font color="${color}">${status}</font>
+  >];`;
 }
 
+// ------------ JSON to DOT ------------------
 function jsonToDot(tree) {
   let dot = `
 digraph G {
@@ -163,7 +150,7 @@ digraph G {
   return dot;
 }
 
-// ----------- Parser -------------
+// ----------- From text to json -------------
 const tagTypes = {
 
   AND: "relation",
