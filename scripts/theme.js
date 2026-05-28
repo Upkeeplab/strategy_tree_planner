@@ -11,9 +11,7 @@ function clearThemes() {
 // Set theme
 function setTheme(theme) {
   clearThemes();
-
   document.body.classList.add(theme);
-
   localStorage.setItem("theme", theme);
 }
 
@@ -23,15 +21,16 @@ const select = document.getElementById("themeSelect");
 
 if (savedTheme) {
   setTheme(savedTheme);
+  if (select) {
+    select.value = savedTheme;
+  }
 } else {
   setTheme("blue-theme");
 }
-
-
-if (savedTheme) {
-      select.value = savedTheme;
-    }
+    
 // Change theme
-select.addEventListener("change", () => {
-      setTheme(select.value);
-    });
+if (select) {
+  select.addEventListener("change", () => {
+        setTheme(select.value);
+      });
+}

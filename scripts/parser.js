@@ -29,11 +29,11 @@ function renderNode(node, nodeId) {
   }
 }
 function renderDefaultNode(node, nodeId) {
-  const status = node.status || "NONE";
+  const status = node.status || " ";
   let color = "#000000";
   switch(status) {
     case "ACTIVE":
-      color = "#81c784";
+      color = "#0c9613";
       break;
     case "BLOCKED":
       color = "#ef5350";
@@ -99,11 +99,11 @@ function renderStatusNode(node, nodeId) {
 }
 function renderItemNode(node, nodeId) {
   const wrappedLabel = wrapText(node.title, 10);
-  const status = node.status || "STATUS: NONE";
-  let color = "#fffb00";
+  const status = node.status || " ";
+  let color = "#000000";
   switch(status) {
     case "ACTIVE":
-      color = "#81c784";
+      color = "#eeeb2b";
       break;
     case "BLOCKED":
       color = "#ef5350";
@@ -127,7 +127,7 @@ function jsonToDot(tree) {
   let counter = 0;
   let dot = `
 digraph G {
-  rankdir=TB;
+  rankdir=${document.getElementById("directionToggle").checked ? "TB" : "LR"};
   graph [
   compound=true,
   newrank=true,
@@ -216,6 +216,7 @@ const tagTypes = {
   BLOCKED: "status",
   COMPLETE: "status",
   ABANDONED: "status",
+  POSTPONED: "status",
 
   RISK: "meta",
   ASSUMPTION: "meta"
@@ -262,7 +263,7 @@ function parseStrategicText(text) {
     // Detect status
     const statusMatch =
       line.match(
-        /\[(COMPLETE|BLOCKED|DRAFT|ABANDONED|ACTIVE)\]/i);
+        /\[(COMPLETE|BLOCKED|DRAFT|ABANDONED|ACTIVE|POSTPONED)\]/i);
 
     const status = statusMatch
         ? statusMatch[1].toUpperCase()
@@ -270,7 +271,7 @@ function parseStrategicText(text) {
 
     // Remove status tags from visible line
     const cleanLine = line
-      .replace(/\[(COMPLETE|BLOCKED|DRAFT|ABANDONED|ACTIVE)\]/gi,"")
+      .replace(/\[(COMPLETE|BLOCKED|DRAFT|ABANDONED|ACTIVE|POSTPONED)\]/gi,"")
       .trim();
 
     // Create node

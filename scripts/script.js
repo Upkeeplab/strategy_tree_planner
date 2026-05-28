@@ -72,6 +72,10 @@ function render() {
       '<span class="logic">[DRAFT]</span>'
     );
     escaped = escaped.replace(
+      /\[POSTPONED\]/g,
+      '<span class="logic">[POSTPONED]</span>'
+    );
+    escaped = escaped.replace(
       /\[ABANDONED\]/g,
       '<span class="blocked">[ABANDONED]</span>'
     );

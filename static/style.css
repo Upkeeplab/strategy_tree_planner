@@ -255,7 +255,7 @@ textarea {
   /* position it at top-left for clean PDF */
   .preview-panel {
     position: absolute;
-    font-size: 9pt;
+    font-size: var(--print-font-size, 9pt);
     left: 0;
     top: 0;
     width: 100%;
@@ -398,4 +398,68 @@ code, pre {
       overflow: auto;
       width: 100%;
       height: 100%;
+    }
+
+
+/* ========== toggle button =========*/
+
+.switch {
+      position: relative;
+      display: inline-block;
+      width: 80px;
+      height: 36px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+      background-color: var(--bg);
+      border: 1px solid var(--accent);
+      border-radius: 36px;
+      transition: 0.3s;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 10px;
+      box-sizing: border-box;
+
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 15px;
+      color: var(--text);
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      height: 28px;
+      width: 28px;
+      left: 4px;
+      top: 4px;
+      background-color: var(--grid-lines);
+      border-radius: 50%;
+      transition: 0.3s;
+      z-index: 2;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent);
+    }
+
+    input:checked + .slider::before {
+      transform: translateX(44px);
+    }
+
+     .label-left,
+    .label-right {
+      z-index: 1;
+      user-select: none;
     }

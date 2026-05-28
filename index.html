@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Strategy Tree Planner</title>
+  <title>Strategy Planner</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
   <link rel="stylesheet" href="static/style.css">
 </head>
@@ -78,15 +78,9 @@
     </section>
   </main>
 
- <!-- Scripts -->
-  <script src="https://unpkg.com/textarea-caret@3.0.0/index.js"></script>
-  <script src="scripts/script.js"></script>
-  <script src="scripts/script_dropdown.js"></script>
-  <script src="scripts/theme.js"></script>
-
   <!-- Footer -->
   <footer class="footer">
-    <p>Strategy planner v0.0.3</p>
+    <p>Strategy planner v<span id="app-version"></span></p>
     <div class="icons">
       <a href="https://github.com/LucR31/strategy_tree_planner">
         <i class="fa-brands fa-github"></i>
@@ -96,6 +90,20 @@
       </a>
     </div>
   </footer>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/textarea-caret@3.0.0/index.js"></script>
+  <script src="scripts/script.js"></script>
+  <script src="scripts/script_dropdown.js"></script>
+  <script src="scripts/theme.js"></script>
+  <script>
+    const fontSize = localStorage.getItem("printFontSize") || "9";
+    document.documentElement.style.setProperty(
+    "--print-font-size",
+    `${fontSize}pt`);
+  </script>
+  <script src="config.js"></script>
+
 
 </body>
 </html>
