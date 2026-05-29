@@ -64,6 +64,10 @@ function render() {
       '<span class="completed">[COMPLETE]</span>'
     );
     escaped = escaped.replace(
+      /\[AVAILABLE\]/g,
+      '<span class="completed">[AVAILABLE]</span>'
+    );
+    escaped = escaped.replace(
       /\[BLOCKED\]/g,
       '<span class="blocked">[BLOCKED]</span>'
     );

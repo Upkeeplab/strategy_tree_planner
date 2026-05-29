@@ -11,7 +11,7 @@
   --text: #e5e7eb;
   --primary: #60a5fa;
   --accent: #5212a5;
-  --card: rgba(255, 255, 255, 0.05);
+  --card: rgba(255, 255, 255, 0.05); /* editor and preview bg*/
   --border: #374151;
   --grid-lines: rgba(202, 202, 202, 0.114);
 }
@@ -30,23 +30,23 @@
 /* Halloween Theme OK*/
 .halloween-theme {
   --bg: linear-gradient(135deg, #0b0b0f, #1a0f1a, #2b0a2b);
-  --text: #ffe9c7;
-  --primary: #ff6b00;
-  --accent: #ff9e00;
+  --text: #ffe9c7be;
+  --primary: #ff6a00bd;
+  --accent: #ff9d00b4;
   --card: rgba(0, 0, 0, 0.6);
-  --border: #ff6b00;
+  --border: #ff6a00b7;
   --grid-lines: rgba(255, 0, 0, 0.114);
 }
 
 /* winter Theme OK*/
 .winter-theme {
-  --bg: #1e3c72;
-  --text: #e6f7ff;
-  --primary: #7fd1ff;
-  --accent: #b3e5ff;
-  --card: rgba(255, 255, 255, 0.08);
-  --border: #7fd1ff;
-  --grid-lines: rgba(202, 202, 202, 0.114);
+  --bg: #dcf763;
+  --text: black;
+  --primary: #848c8e;
+  --accent:   #bfb7b6;
+  --card: #f1f2ee;
+  --border: #bbdbd1;
+  --grid-lines: rgba(187, 219, 209, 0.114);
 }
 
 
@@ -104,6 +104,7 @@ main {
   overflow: none;
 }
 .preview-panel {
+  background: var(--card);
   width: 50%;
   padding: 16px;
   box-sizing: border-box;
@@ -139,6 +140,7 @@ textarea {
 }
 
 #preview {
+  background: var(--card);
   white-space: pre-wrap;
   font-family: monospace;
   line-height: 1.6;
@@ -392,7 +394,7 @@ code, pre {
 
 /*============= Graph ============*/
 #graph {
-      background: white;
+      background: var(--bg);
       padding: 20px;
       border-radius: 8px;
       overflow: auto;

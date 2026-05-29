@@ -123,10 +123,12 @@ function renderItemNode(node, nodeId) {
 }
 
 // ------------ JSON to DOT ------------------
+
 function jsonToDot(tree) {
   let counter = 0;
   let dot = `
 digraph G {
+  bgcolor = "transparent"
   rankdir=${document.getElementById("directionToggle").checked ? "TB" : "LR"};
   graph [
   compound=true,
@@ -179,10 +181,8 @@ digraph G {
       }
       return;
     }
-    dot += renderNode(
-      node,
-      nodeId
-    );
+    
+    dot += renderNode(node, nodeId);
 
     if (parentId) {
       dot += `${parentId} -> ${nodeId};`;
@@ -217,6 +217,7 @@ const tagTypes = {
   COMPLETE: "status",
   ABANDONED: "status",
   POSTPONED: "status",
+  AVAILABLE: "status",
 
   RISK: "meta",
   ASSUMPTION: "meta"
@@ -245,7 +246,7 @@ function parseStrategicText(text) {
     if (typeof rawLine !== "string") {
       continue;
     }
-
+    // finds indent number of line
     const indentMatch = rawLine.match(/^\s*/);
     const indent = indentMatch
         ? indentMatch[0].length
@@ -263,7 +264,7 @@ function parseStrategicText(text) {
     // Detect status
     const statusMatch =
       line.match(
-        /\[(COMPLETE|BLOCKED|DRAFT|ABANDONED|ACTIVE|POSTPONED)\]/i);
+        /\[(COMPLETE|BLOCKED|DRAFT|ABANDONED|ACTIVE|POSTPONED|AVAILABLE)\]/i);
 
     const status = statusMatch
         ? statusMatch[1].toUpperCase()
@@ -271,19 +272,18 @@ function parseStrategicText(text) {
 
     // Remove status tags from visible line
     const cleanLine = line
-      .replace(/\[(COMPLETE|BLOCKED|DRAFT|ABANDONED|ACTIVE|POSTPONED)\]/gi,"")
+      .replace(/\[(COMPLETE|BLOCKED|DRAFT|ABANDONED|ACTIVE|POSTPONED|AVAILABLE)\]/gi,"")
       .trim();
 
     // Create node
     let node = null;
 
     // RELATION TAGS
-    const relationMatch =cleanLine.match(/^\[(.*?)\]$/);
+    const relationMatch = cleanLine.match(/^\[(.*?)\]$/);
 
     if (relationMatch) {
-      const tag =relationMatch[1].toUpperCase();
-      const tagType =
-        tagTypes[tag];
+      const tag = relationMatch[1].toUpperCase();
+      const tagType = tagTypes[tag];
       node = {
         type: tagType || "tag",
         value: tag,
@@ -292,10 +292,10 @@ function parseStrategicText(text) {
 
       // Register active relation
       if (tagType === "relation") {
-
         activeRelations[indent] = node;
       }
     }
+
     // DECISION POINT
     else if (/^DP\d*/i.test(cleanLine)) {
       node = {
@@ -305,7 +305,8 @@ function parseStrategicText(text) {
         children: []
       };
     }
-    // CONDITION
+
+    // CONDITION 
     else if (/^if\s+/i.test(cleanLine)) {
       node = {
         type: "condition",
@@ -314,11 +315,17 @@ function parseStrategicText(text) {
         children: []
       };
     }
-    // ACTION CONSEQUENCE
+    // Arrow dependecies
     else if (/^→/.test(cleanLine)) {
+      //if number after arrow
+      const match = cleanLine.match(/→\s*(\d+(\.\d+)*)/);
+      const point_to = match
+        ? match[1]
+        : "";
       node = {
         type: "action",
         title: cleanLine.replace(/^→\s*/, ""),
+        points_to: point_to,
         status,
         children: []
       };

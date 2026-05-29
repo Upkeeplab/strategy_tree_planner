@@ -15,7 +15,7 @@ yesterday.setDate(yesterday.getDate() - 1);
 // define triggers + options here
 const triggers = {
   time: ["[NOW]", "[NEXT]", "[LATER]", "[FUTURE A]","[FUTURE B]","[FUTURE C]"],
-  status: ["[DRAFT]","[ACTIVE]","[BLOCKED]","[COMPLETE]","[ABANDONED]", "[POSTPONED]"],
+  status: ["[DRAFT]","[ACTIVE]","[BLOCKED]","[COMPLETE]","[ABANDONED]", "[POSTPONED]","[AVAILABLE]"],
   sym: ["→","★"],
   today:[`: ${today}`],
   tomorrow: [`: ${format(tomorrow)}`],
