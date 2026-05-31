@@ -15,11 +15,17 @@ function wrapText(text, maxLength = 12) {
 function renderNode(node, nodeId) {
   switch (node.type) {
 
-    case "relation":
-      return renderRelationNode(node, nodeId);
+    case "condition":
+      return renderConditionNode(node, nodeId);
 
-    case "status":
-      return renderStatusNode(node, nodeId);
+    case "meta":
+      return renderMetaNode(node, nodeId);
+
+    case "decision":
+      return renderDecisionNode(node, nodeId);
+
+    case "task":
+      return renderTaskNode(node, nodeId);
 
     case "item":
       return renderItemNode(node, nodeId);
@@ -52,7 +58,7 @@ function renderDefaultNode(node, nodeId) {
   <font color="${color}">${status}</font>
   >];`;
 }
-function renderRelationNode(node, nodeId) {
+function renderConditionNode(node, nodeId) {
   return `${nodeId} [
   shape=box,
   style="filled",
@@ -60,42 +66,45 @@ function renderRelationNode(node, nodeId) {
   label="${node.value}"
 ];`;
 }
-function renderStatusNode(node, nodeId) {
-
-  let color = "#cccccc";
-  switch(node.value) {
-
+function renderMetaNode(node, nodeId) {
+  return `${nodeId} [
+  shape=box,
+  style="filled",
+  fillcolor="#97ff9e",
+  label="${node.value}"
+];`;
+}
+function renderDecisionNode(node, nodeId) {
+  return `${nodeId} [
+  shape=box,
+  style="filled",
+  fillcolor="#e297ff",
+  label="${node.value}"
+];`;
+}
+function renderTaskNode(node, nodeId) {
+const wrappedLabel = wrapText(node.title, 10);
+  const status = node.status || " ";
+  let color = "#000000";
+  switch(status) {
     case "ACTIVE":
-      color = "#81c784";
+      color = "#eeeb2b";
       break;
-
     case "BLOCKED":
       color = "#ef5350";
       break;
-
     case "COMPLETE":
       color = "#64b5f6";
       break;
   }
   return `${nodeId} [
   shape=box,
-  label=<
-    <table border="0"
-           cellborder="1"
-           cellspacing="0"
-           cellpadding="6"
-           bgcolor="${color}">
-      <tr>
-        <td>
-          <b>${node.title || "Status"}</b>
-        </td>
-      </tr>
-      <tr>
-        <td align="left">
-          ${node.value}
-        </td>
-      </tr>
-    </table> >];`;
+  style="filled",
+  width = 2,
+  fillcolor="#ff99a0",
+  label=<${safeTitle(node.title)}<BR/>
+  <font color="${color}">${status}</font>
+  >];`;
 }
 function renderItemNode(node, nodeId) {
   const wrappedLabel = wrapText(node.title, 10);
@@ -142,7 +151,10 @@ digraph G {
   ];`;
 
   function walk(node, parentId = null) {
+  
     const nodeId = `n${counter++}`;
+
+    // case type is a relation
     if (node.type === "relation") {
       const clusterId = `cluster_${counter++}`;
       const deferred = [];
@@ -150,28 +162,37 @@ digraph G {
                 label="${node.value}";
                 style="filled";
                 color="#e9e2e2ba";`;
-
-      for (const child of node.children) {
-        const childId = `n${counter++}`;
-        dot += renderNode(
-            {
-              ...child,
-              children: []
-            },
-            childId
-          );
-        if (parentId) {
-          dot += `${parentId} -> ${childId};`;
+      // Dealing with sequences
+      if (node.value === "SEQ"){
+        let prevChildId = null;
+        let sequence = null;
+        for (const child of node.children) {
+          const childId = `n${counter++}`;
+          dot += renderNode({ ...child, children: [] }, childId);
+          if (prevChildId) {
+            dot += `${prevChildId} -> ${childId}[dir=back];`;
+            sequence = true;
+          }
+          prevChildId = childId;
+          deferred.push({ child, childId , sequence});
         }
-        deferred.push({
-          child,
-          childId
-        });
+        sequence = null;
+        dot += `}`;
       }
-      dot += `}`;
+      else{
+        for (const child of node.children) {
+          const childId = `n${counter++}`;
+          dot += renderNode({...child,children: []}, childId);
+          deferred.push({child, childId});
+          }
+        dot += `}`;
+      }
 
       for (const entry of deferred) {
-        const {child,childId} = entry;
+        const {child, childId, sequence} = entry;
+        if (parentId && !sequence) {
+              dot += `${parentId} -> ${childId};`;
+            }
 
         if (child.children) {
           for (const grandChild of child.children) {
@@ -183,16 +204,12 @@ digraph G {
     }
     
     dot += renderNode(node, nodeId);
-
     if (parentId) {
       dot += `${parentId} -> ${nodeId};`;
     }
     if (node.children) {
       for (const child of node.children) {
-        walk(
-          child,
-          nodeId
-        );
+        walk(child, nodeId);
       }
     }
   }
@@ -201,6 +218,7 @@ digraph G {
   walk(child);
 }
   dot += `}`;
+  console.log(dot);
   return dot;
 }
 
@@ -291,8 +309,9 @@ function parseStrategicText(text) {
       };
 
       // Register active relation
-      if (tagType === "relation") {
+      if (tagType === "relation" || tagType === "meta") {
         activeRelations[indent] = node;
+        console.log(node);
       }
     }
 
@@ -341,12 +360,12 @@ function parseStrategicText(text) {
     }
     // NUMBERED ITEM
     else {
-      const match = cleanLine.match(/^(\S+)\s+(.*)$/);
+      const match = cleanLine.match(/^\s*(\d+(\.\d+)*)\s+(.*)$/);
       if (match) {
         node = {
           type: "item",
           id: match[1],
-          title: match[2],
+          title: match[3],
           status,
           children: []
         };
@@ -376,7 +395,7 @@ function parseStrategicText(text) {
 
     // If active relation exists at this indent,
     // attach to relation instead
-    if (activeRelations[indent] &&node.type !== "relation") {
+    if (activeRelations[indent] && node.type !== "relation" && node.type !== "meta") {
       parent =activeRelations[indent];
     }
 
