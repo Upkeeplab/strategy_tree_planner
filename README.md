@@ -1,5 +1,6 @@
 
 # Strategy Tree Planner
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b113f6a7-d409-47fc-bde2-80734a086e3f/deploy-status)](https://app.netlify.com/projects/strategyplanner/deploys)
 
 A lightweight local-first strategic planning web app.
 
