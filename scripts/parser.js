@@ -238,7 +238,8 @@ const tagTypes = {
   AVAILABLE: "status",
 
   RISK: "meta",
-  ASSUMPTION: "meta"
+  ASSUMPTION: "meta",
+  DP:"meta"
 };
 
 function parseStrategicText(text) {
@@ -313,16 +314,6 @@ function parseStrategicText(text) {
         activeRelations[indent] = node;
         console.log(node);
       }
-    }
-
-    // DECISION POINT
-    else if (/^DP\d*/i.test(cleanLine)) {
-      node = {
-        type: "decision",
-        title: cleanLine,
-        status,
-        children: []
-      };
     }
 
     // CONDITION 

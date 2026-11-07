@@ -465,3 +465,9 @@ code, pre {
       z-index: 1;
       user-select: none;
     }
+
+
+.guide-page {
+      padding: 40px;
+      max-width: 1000px;
+    }
