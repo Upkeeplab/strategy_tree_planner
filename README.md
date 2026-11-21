@@ -73,3 +73,11 @@ If you are developing a production application, we recommend using TypeScript wi
 
 ## Run
 npm run dev
+
+
+## Todo
+
+- Redo Button
+- Fix suggestions position
+- settings tab
+- Log in/log out tab

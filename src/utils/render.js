@@ -20,6 +20,10 @@ export function renderText(text) {
       '<span class="completed">[COMPLETE]</span>'
     );
 
+    escaped = escaped.replace(
+      /\[WAITING\]/g,
+      '<span class="completed">[WAITING]</span>'
+    );
 
     escaped = escaped.replace(
       /\[AVAILABLE\]/g,

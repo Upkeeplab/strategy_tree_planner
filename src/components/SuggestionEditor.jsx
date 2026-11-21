@@ -25,7 +25,7 @@ export default function SuggestionEditor({ text, setText }) {
     status: [
       "[DRAFT]", "[ACTIVE]", "[BLOCKED]",
       "[COMPLETE]", "[ABANDONED]",
-      "[POSTPONED]", "[AVAILABLE]"
+      "[POSTPONED]", "[AVAILABLE]", "[WAITING]"
     ],
     sym: ["→", "★"],
     today: [`: ${format(today)}`],
